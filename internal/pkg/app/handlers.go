@@ -94,6 +94,10 @@ func (a *App) CancelTimerHandler(ctx context.Context, b *bot.Bot, update *models
 		ChatID:    callback.Message.Chat.ID,
 		MessageID: callback.Message.MessageID,
 	})
+
+	if err != nil {
+		log.Println("could not delete message:", err)
+	}
 }
 
 func (a *App) SetOffsetHandler(ctx context.Context, b *bot.Bot, update *models.Update) {
@@ -116,6 +120,15 @@ func (a *App) SetOffsetHandler(ctx context.Context, b *bot.Bot, update *models.U
 	}
 
 	a.setUserOffset(update.Message.From.ID, value)
+
+	_, err = b.SendMessage(ctx, &bot.SendMessageParams{
+		ChatID: update.Message.Chat.ID,
+		Text:   "Successfully set your farming cycle offset",
+	})
+
+	if err != nil {
+		log.Println("could not set message", err)
+	}
 }
 
 func sendOffsetHelp(ctx context.Context, b *bot.Bot, update *models.Update, reason string) {
