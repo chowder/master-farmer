@@ -5,6 +5,11 @@ RUN apk update && \
 
 WORKDIR /build
 
+COPY go.mod go.sum ./
+
+# Building this takes a long time - so build it in an earlier layer
+RUN go install github.com/mattn/go-sqlite3
+
 COPY . .
 
 RUN CGO_ENABLED=1 go build -ldflags="-s -w"
