@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	pluralize "github.com/gertd/go-pluralize"
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 	"gorm.io/driver/sqlite"
@@ -31,6 +32,7 @@ type App struct {
 	db          *gorm.DB
 	rescheduled chan struct{}
 	ctx         context.Context
+	pluralize   *pluralize.Client
 }
 
 func New(ctx context.Context, b *bot.Bot, dsn string) App {
@@ -39,6 +41,7 @@ func New(ctx context.Context, b *bot.Bot, dsn string) App {
 		bot:         b,
 		db:          GetDatabase(dsn),
 		rescheduled: make(chan struct{}),
+		pluralize:   pluralize.NewClient(),
 	}
 }
 
@@ -90,7 +93,7 @@ func (a *App) sendNotification() {
 
 	_, err = a.bot.SendMessage(a.ctx, &bot.SendMessageParams{
 		ChatID:      ctx.ChatId,
-		Text:        fmt.Sprintf(`Your *%ss* are ready\!`, ctx.TimeableName),
+		Text:        fmt.Sprintf(`Your *%s* are ready\!`, a.pluralize.Plural(ctx.TimeableName)),
 		ParseMode:   models.ParseModeMarkdown,
 		ReplyMarkup: models.InlineKeyboardMarkup{InlineKeyboard: ikb},
 	})
@@ -109,7 +112,6 @@ func (a *App) cancelNotification(id uint) {
 	}
 
 	a.rescheduled <- struct{}{}
-
 }
 
 func (a *App) getSleepChannel() <-chan time.Time {
