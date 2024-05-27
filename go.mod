@@ -1,12 +1,12 @@
 module github.com/chowder/master-farmer
 
-go 1.21.5
+go 1.22.3
 
 require (
 	github.com/gertd/go-pluralize v0.2.1
-	github.com/go-telegram/bot v1.1.3
+	github.com/go-telegram/bot v1.3.1
 	gorm.io/driver/sqlite v1.5.5
-	gorm.io/gorm v1.25.7
+	gorm.io/gorm v1.25.10
 )
 
 require (

@@ -45,8 +45,8 @@ func (a *App) CreateTimerHandler(ctx context.Context, b *bot.Bot, update *models
 	}
 
 	notifyCtx := NotifyContext{
-		ChatId:                 callback.Message.Chat.ID,
-		OriginalMessageId:      callback.Message.MessageID,
+		ChatId:                 callback.Message.Message.Chat.ID,
+		OriginalMessageId:      callback.Message.Message.ID,
 		RescheduleCallbackData: callback.Data,
 		TimeableName:           timeable.GetName(),
 		TriggerAt:              triggerTime,
@@ -63,8 +63,8 @@ func (a *App) CreateTimerHandler(ctx context.Context, b *bot.Bot, update *models
 	_, err = b.EditMessageText(ctx, &bot.EditMessageTextParams{
 		Text:        fmt.Sprintf("Timer: *%s*\n\nCompletes at: `%s UTC`", timeable.GetName(), time.Unix(triggerTime, 0).Format("Mon 15:04")),
 		ParseMode:   models.ParseModeMarkdown,
-		ChatID:      callback.Message.Chat.ID,
-		MessageID:   callback.Message.MessageID,
+		ChatID:      callback.Message.Message.Chat.ID,
+		MessageID:   callback.Message.Message.ID,
 		ReplyMarkup: models.InlineKeyboardMarkup{InlineKeyboard: ikb},
 	})
 
@@ -91,8 +91,8 @@ func (a *App) CancelTimerHandler(ctx context.Context, b *bot.Bot, update *models
 	a.cancelNotification(nid)
 
 	_, err = b.DeleteMessage(ctx, &bot.DeleteMessageParams{
-		ChatID:    callback.Message.Chat.ID,
-		MessageID: callback.Message.MessageID,
+		ChatID:    callback.Message.Message.Chat.ID,
+		MessageID: callback.Message.Message.ID,
 	})
 
 	if err != nil {

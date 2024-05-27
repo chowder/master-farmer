@@ -77,8 +77,8 @@ func ExpandCategoryHandler(ctx context.Context, b *bot.Bot, update *models.Updat
 
 	_, err := b.EditMessageText(ctx, &bot.EditMessageTextParams{
 		Text:        "Choose the crop to time!",
-		ChatID:      callback.Message.Chat.ID,
-		MessageID:   callback.Message.MessageID,
+		ChatID:      callback.Message.Message.Chat.ID,
+		MessageID:   callback.Message.Message.ID,
 		ReplyMarkup: models.InlineKeyboardMarkup{InlineKeyboard: ikb},
 	})
 
@@ -108,8 +108,8 @@ func ShowCategory(ctx context.Context, b *bot.Bot, update *models.Update) {
 	var err error
 	if callback != nil {
 		_, err = b.EditMessageText(ctx, &bot.EditMessageTextParams{
-			ChatID:      callback.Message.Chat.ID,
-			MessageID:   callback.Message.MessageID,
+			ChatID:      callback.Message.Message.Chat.ID,
+			MessageID:   callback.Message.Message.ID,
 			Text:        "Choose a type of crop to time!",
 			ReplyMarkup: kb,
 		})
@@ -129,8 +129,8 @@ func ShowCategory(ctx context.Context, b *bot.Bot, update *models.Update) {
 func EndConversationHandler(ctx context.Context, b *bot.Bot, update *models.Update) {
 	callback := update.CallbackQuery
 	_, err := b.DeleteMessage(ctx, &bot.DeleteMessageParams{
-		ChatID:    callback.Message.Chat.ID,
-		MessageID: callback.Message.MessageID,
+		ChatID:    callback.Message.Message.Chat.ID,
+		MessageID: callback.Message.Message.ID,
 	})
 
 	if err != nil {
