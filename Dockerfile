@@ -14,7 +14,7 @@ COPY . .
 
 RUN CGO_ENABLED=1 go build -ldflags="-s -w"
 
-FROM alpine:3.19
+FROM gcr.io/distroless/static-debian11
 
 WORKDIR /
 
