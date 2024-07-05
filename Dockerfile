@@ -1,4 +1,4 @@
-FROM golang:1.22.0-alpine3.19 AS build
+FROM golang:1.22.3-alpine AS build
 
 RUN apk update && \
     apk add --update gcc musl-dev
@@ -14,7 +14,7 @@ COPY . .
 
 RUN CGO_ENABLED=1 go build -ldflags="-s -w"
 
-FROM gcr.io/distroless/static-debian11
+FROM alpine
 
 WORKDIR /
 
